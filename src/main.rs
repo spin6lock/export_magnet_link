@@ -98,14 +98,18 @@ fn main() -> Result<()> {
         .filter(|link| {
             if flags.all {
                 link.contains("magnet") | link.contains("ed2k") | link.contains("thunder")
-            } else if flags.magnet {
-                link.contains("magnet")
-            } else if flags.ed2k {
-                link.contains("ed2k")
-            } else if flags.thunder {
-                link.contains("thunder")
             } else {
-                panic!("all switch is false!{:#?}", flags);
+                let mut ret = false;
+                if flags.magnet {
+                    ret = ret | link.contains("magnet");
+                } 
+                if flags.ed2k {
+                    ret = ret | link.contains("ed2k");
+                } 
+                if flags.thunder {
+                    ret = ret | link.contains("thunder");
+                }
+                ret
             }
         })
         .for_each(|x| links.push(x.to_string()));
